@@ -1,0 +1,192 @@
+<odoo>
+    <!-- Tree View Definition for Leave Information -->
+    <record id="view_leave_information_tree" model="ir.ui.view">
+        <field name="name">leave.information.tree</field>
+        <field name="model">leave.information</field>
+        <field name="arch" type="xml">
+            <tree string="Leave Information">
+                <field name="nature_of_leave"/>
+                <field name="type_of_leave_ids"/>
+                <field name="duration_from"/>
+                <field name="duration_to"/>
+                <field name="main_purpose_of_leave"/>
+                <field name="sub_purpose_of_leave"/>
+                <!-- Ex-Pak Information -->
+                <field name="sponsor"/>
+                <field name="invitation"/>
+                <field name="passport"/>
+                <field name="visiting_country"/>
+                <field name="cities_planned"/>
+                <field name="city_name"/>
+                <field name="visa_status"/>
+                <field name="foreign_email"/>
+                <field name="foreign_contact_number"/>
+                <field name="emergency_contact_email"/>
+                <field name="relationship"/>
+                <field name="emergency_contact_name"/>
+                <!-- Submitting Application -->
+                <field name="noc"/>
+                <field name="accommodation"/>
+                <field name="bond"/>
+                <field name="affidavit"/>
+                <field name="nust_info"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Form View Definition for Leave Information -->
+    <record id="view_leave_information_form" model="ir.ui.view">
+        <field name="name">leave.information.form</field>
+        <field name="model">leave.information</field>
+        <field name="arch" type="xml">
+            <form string="Leave Information">
+                <sheet>
+                    <div class="oe_title">
+                        <h2>Leave Information</h2>
+                    </div>
+                    <group >
+                        <group>
+                            <field name="nature_of_leave" widget="radio"/>
+                            <field name="duration_from" widget="date"/>
+                        </group>
+                        <group>
+
+                            <field name="type_of_leave_ids" widget="many2many_checkboxes"/>
+                            <field name="duration_to" widget="date"/>
+                        </group>
+                        <group>
+                            <field name="main_purpose_of_leave"/>
+                        </group>
+                        <group>
+                            <field name="sub_purpose_of_leave"/>
+                        </group>
+                    </group>
+                </sheet>
+                <sheet>
+                    <div class="oe_title">
+                        <h2>Ex-Pak Details</h2>
+                    </div>
+                    <group >
+                        <group>
+                            <field name="sponsor" widget="radio"/>
+                        </group>
+                        <group>
+                            <field name="invitation" widget="radio"/>
+                        </group>
+                    </group>
+
+                    <group >
+                        <group>
+                            <field name="passport"/>
+                        </group>
+                        <group>
+                            <field name="visiting_country" widget="many2one" options="{'no_create': True}"/>
+                        </group>
+                        <group>
+                            <field name="cities_planned"/>
+                        </group>
+                        <group>
+                            <field name="city_name" widget="many2one" domain="[('country_id', '=', visiting_country)]" options="{'no_create': True}"/>
+                        </group>
+                        <group>
+                            <field name="visa_status" widget="radio"/>
+                        </group>
+                        <group>
+                            <field name="foreign_email"/>
+                        </group>
+                        <group>
+                            <field name="foreign_contact_number"/>
+                        </group>
+                    </group>
+
+                    <group >
+                        <group>
+                            <field name="emergency_contact_email"/>
+                        </group>
+                        <group>
+                            <field name="relationship"/>
+                        </group>
+                        <group>
+                            <field name="emergency_contact_name"/>
+                        </group>
+                    </group>
+                </sheet>
+                <sheet>
+                    <div class="oe_title">
+                        <h2>Submitting Application</h2>
+                    </div>
+                    <group >
+                        <group>
+                            <field name="noc" widget="radio"/>
+                            <field name="accommodation" widget="radio"/>
+                        </group>
+                        <group>
+                            <field name="bond" widget="radio"/>
+                            <field name="affidavit"/>
+                        </group>
+                        <group>
+                            <field name="nust_info"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+
+    <!-- Tree View Definition -->
+    <record id="view_leave_type_tree" model="ir.ui.view">
+        <field name="name">leave.type.tree</field>
+        <field name="model">leave.type</field>
+        <field name="arch" type="xml">
+            <tree string="Leave Types">
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Form View Definition -->
+    <record id="view_leave_type_form" model="ir.ui.view">
+        <field name="name">leave.type.form</field>
+        <field name="model">leave.type</field>
+        <field name="arch" type="xml">
+            <form string="Leave Type">
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+
+
+    <!-- Action Definition for Leave Information -->
+    <record id="action_leave_information" model="ir.actions.act_window">
+        <field name="name">Leave Information</field>
+        <field name="res_model">leave.information</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="view_leave_information_tree"/>
+        <field name="target">current</field>
+    </record>
+
+    <!-- Action Definition -->
+    <record id="action_leave_type" model="ir.actions.act_window">
+        <field name="name">Leave Types</field>
+        <field name="res_model">leave.type</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="view_leave_type_tree"/>
+        <field name="target">current</field>
+    </record>
+
+    <!-- Menu Item Definition -->
+    <menuitem id="leave_management_menu" name="Leave Management"/>
+
+    <!-- Leave Information Menu -->
+    <menuitem id="leave_information_menu" name="Leave Information" parent="leave_management_menu" action="action_leave_information"/>
+
+    <!-- Leave Type Menu -->
+    <menuitem id="leave_type_menu" name="Leave Types" parent="leave_management_menu" action="action_leave_type"/>
+
+</odoo>

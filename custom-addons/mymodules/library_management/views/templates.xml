@@ -1,0 +1,22 @@
+<!-- simple_module/views/templates.xml -->
+<odoo>
+    <template id="library_book_template" name="Library Book Template">
+        <!-- <t t-call="web.html_container"> -->
+        <t t-call="library_management.custom_assets"/>
+            <t t-set="title">Library Books</t>
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h1 class="text-center my-3">Library Books</h1>
+                        <ul class="list-group">
+                            <li t-foreach="books" t-as="book" class="list-group-item">
+                                <strong t-esc="book.name"/> by <em t-esc="book.author_id.name"/>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        <!-- </t> -->
+    </template>
+</odoo>
+    

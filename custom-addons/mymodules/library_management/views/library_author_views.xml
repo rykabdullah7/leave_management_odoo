@@ -1,0 +1,49 @@
+<odoo>
+    <!-- Tree view for Library Authors -->
+    <record id="view_library_author_tree" model="ir.ui.view">
+        <field name="name">library.author.tree</field>
+        <field name="model">library.author</field>
+        <field name="arch" type="xml">
+            <tree string="Library Authors">
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Form view for Library Authors -->
+    <record id="view_library_author_form" model="ir.ui.view">
+        <field name="name">library.author.form</field>
+        <field name="model">library.author</field>
+        <field name="arch" type="xml">
+            <form string="Library Author">
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                    </group>
+                    <notebook>
+                        <page string="Books">
+                            <field name="book_ids">
+                                <tree>
+                                    <field name="name"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action for Library Authors -->
+    <record id="action_library_author" model="ir.actions.act_window">
+        <field name="name">Library Authors</field>
+        <field name="res_model">library.author</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="view_library_author_tree"/>
+     
+    </record>
+
+    <!-- Menu item for Library Authors -->
+    <menuitem id="library_author_menu" name="Authors" parent="library_management_menu" action="action_library_author" sequence="20"/>
+</odoo>
+

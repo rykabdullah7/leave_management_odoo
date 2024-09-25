@@ -1,0 +1,340 @@
+<odoo>
+    <template id="leave_information_template" name="Leave Application Form">
+        <!-- Custom Assets -->
+        <t t-call="leave_management.custom_assets"/>
+        <t t-set="title">Leave Management</t>
+        <nav class="navbar navbar-expand-lg dark-blue-bg text-light">
+            <a class="navbar-brand font-weight-bold text-light" href="#">
+                <img t-att-src="'/leave_management/static/src/img/logo.png'" width="35" height="30" class="d-inline-block align-top mr-3" alt="Logo"/>
+                Leave Management System</a>
+            <div class="collapse navbar-collapse justify-content-end">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link text-light" href="#">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-light" href="#">Contact us</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <!-- Bootstrap Toast Structure for Validation Messages -->
+        <!-- Toast Container (appears at the bottom-right of the viewport) -->
+        <!-- <div aria-live="polite" aria-atomic="true" class="fixed-top d-flex justify-content-end p-3" style="z-index: 1055;">
+            <div id="toast-container" style="position: fixed; top: 20px; right: 20px;">
+                
+            </div>
+        </div> -->
+
+
+        <div class="main-div px-4 py-5 ">
+            <!-- Heading -->
+            <h2>Leave Application Form</h2>
+
+            <div class="mx-5 px-3 mt-5">
+                <!-- Breadcrumbs -->
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb background-transparent">
+                        <li class="breadcrumb-item px-0 active" id="breadcrumb-1">1. Leave Information</li>
+                        <li class="breadcrumb-item px-0 mx-3" id="breadcrumb-2">2. Ex Pak Information</li>
+                        <li class="breadcrumb-item px-0" id="breadcrumb-3">3. Submitting Application</li>
+                    </ol>
+                </nav>
+
+                <!-- Form Section: Leave Information (First Breadcrumb) -->
+                <form id="leave-form" class="ml-3 needs-validation" action="/submit_leave_information" method="POST" novalidate="novalidate">
+                    <div id="leave-information" class="white-box p-5">
+                        <h3 class="mb-5 blue-font font-weight-bold">Leave Information</h3>
+
+                        <!-- Add CSRF token -->
+                        <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+
+                        <div class="form-group radio-buttons mb-5">
+                            <label class="blue-font font-weight-bold">Nature of Leave <span style="color: red;">*</span>
+                            </label>
+                            <br/>
+                            <div class="d-flex flex-row ml-3">
+                                <input class="mr-1" type="radio" id="inland" name="nature_of_leave" value="inland" required="required"/>
+                                <label class="no-gutter" for="inland">Inland</label>
+                                <br/>
+                                <input class="mr-1 ml-3" type="radio" id="ex_pak" name="nature_of_leave" value="ex_pak" required="required"/>
+                                <label class="no-gutter" for="ex_pak">Ex-Pak</label>
+                                <div class="invalid-feedback">
+                                           Please select a nature of leave.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group mb-5 checkboxes">
+                            <label class="blue-font">
+                                <span class="font-weight-bold">Type of Leave <span style="color: red;">*</span>
+                                </span>
+                                <span> (You may select multiple options)</span>
+                            </label>
+                            <br/>
+                            <div class="ml-3 ">
+                                <t t-foreach="leave_types" t-as="leave_type">
+                                    <input type="checkbox" name="type_of_leave_ids" t-att-value="leave_type.id"/>
+                                    <label class="mr-2" t-esc="leave_type.name"/>
+                                </t>
+                            </div>
+                        </div>
+
+                        <div class="row no-gutter mb-5">
+                            <div class="form-group col-sm pl-0">
+                                <label for="duration_from" class="blue-font font-weight-bold">Duration From <span style="color: red;">*</span>
+                                </label>
+                                <input type="date" id="duration_from" name="duration_from" class="form-control focus-outline-0" required="required"/>
+                                <div class="invalid-feedback">
+                    Please select a start date.
+                                </div>
+                            </div>
+
+                            <div class="form-group col-sm pr-0">
+                                <label for="duration_to" class="blue-font font-weight-bold">Duration To <span style="color: red;">*</span>
+                                </label>
+                                <input type="date" id="duration_to" name="duration_to" class="form-control focus-outline-0" required="required"/>
+                                <div class="invalid-feedback">
+                                    Please select an end date.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group required">
+                            <label for="main_purpose_of_leave" class="blue-font font-weight-bold">Main Purpose of Leave <span style="color: red;">*</span>
+                            </label>
+                            <textarea id="main_purpose_of_leave" name="main_purpose_of_leave" class="form-control focus-outline-0" required="required"></textarea>
+                            <div class="invalid-feedback">
+                                Please provide the main purpose of leave.
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="sub_purpose_of_leave" class="blue-font font-weight-bold">Sub Purpose of Leave</label>
+                            <textarea id="sub_purpose_of_leave" name="sub_purpose_of_leave" class="form-control focus-outline-0" required="required"></textarea>
+                            <div class="invalid-feedback">
+                                Please provide the sub purpose of leave.
+                            </div>
+                        </div>
+                        <!-- Navigation Buttons -->
+                        <div class="d-flex justify-content-end">
+                            <button type="button" id="next-button-1" class="btn btn-primary blue-bg">Next</button>
+                        </div>
+                    </div>
+
+                    <!-- Form Section: Ex Pak Information (Second Breadcrumb) -->
+                    <div id="ex-pak-information" class="p-5" style="display: none;">
+                        <div class="white-box p-5 mb-3">
+                            <h3 class="mb-5 blue-font font-weight-bold">General Information</h3>
+                            <div class="form-group ml-3 mb-5">
+                                <label class="blue-font font-weight-bold">Sponsor/Host</label>
+                                <br/>
+                                <div class="d-flex flex-row ml-3">
+                                    <input class="mr-1" type="radio" id="organization" name="sponsor_host" value="organization"/>
+                                    <label class="no-gutter" for="organization">Organization</label>
+                                    <br/>
+                                    <input class="mr-1 ml-3" type="radio" id="university" name="sponsor_host" value="university"/>
+                                    <label class="no-gutter" for="university">University</label>
+                                    <br/>
+                                    <input class="mr-1 ml-3" type="radio" id="other" name="sponsor_host" value="other"/>
+                                    <label class="no-gutter" for="other">Other</label>
+                                </div>
+                            </div>
+                            <div class="form-group ml-3 mb-3">
+                                <label class="blue-font font-weight-bold">Have you received the invitation letter/email?</label>
+                                <br/>
+                                <div class="d-flex flex-row ml-3">
+                                    <input class="mr-1" type="radio" id="invitation_yes" name="invitation_received" value="yes"/>
+                                    <label class="no-gutter" for="invitation_yes">Yes</label>
+                                    <br/>
+                                    <input class="mr-1 ml-3" type="radio" id="invitation_no" name="invitation_received" value="no"/>
+                                    <label class="no-gutter" for="invitation_no">No</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="white-box p-5 mb-3">
+                            <h3 class="mb-5 blue-font font-weight-bold">Traveling Information</h3>
+                            <div class="row no-gutter mb-3">
+                                <div class="form-group ml-3 mb-5 col-sm pl-0">
+                                    <label class="blue-font font-weight-bold" for="traveling_passport">Traveling Passport</label>
+                                    <select id="traveling_passport" name="traveling_passport" class="form-control">
+                                        <!-- Populate with countries -->
+                                        <option value="usa">USA</option>
+                                        <option value="uk">UK</option>
+                                        <!-- Add more countries as needed -->
+                                    </select>
+                                </div>
+
+                                <div class="form-group ml-3 mb-5 col-sm pr-0">
+                                    <label class="blue-font font-weight-bold" for="visiting_country">Visiting Country</label>
+                                    <select id="magasin" required="True" class="form-control" name="visiting_country">
+                                        <t t-foreach="countries" t-as="warehouse">
+                                            <option t-att-value="warehouse.id" t-esc="warehouse.name"/>
+                                        </t>
+                                    </select>
+                                </div>
+
+                            </div>
+                            <div class="row no-gutter mb-3">
+                                <div class="form-group ml-3 mb-5 col-sm pl-0">
+                                    <label class="blue-font font-weight-bold">How many cities are you planning to visit?</label>
+                                    <br/>
+                                    <div class="d-flex flex-row ml-3">
+                                        <input class="mr-1" type="radio" id="single" name="cities_visited" value="single"/>
+                                        <label class="no-gutter" for="single">Single</label>
+                                        <br/>
+                                        <input class="mr-1 ml-3" type="radio" id="multiple" name="cities_visited" value="multiple"/>
+                                        <label class="no-gutter" for="multiple">Multiple</label>
+                                    </div>
+
+                                </div>
+
+                                <div class="form-group ml-3 mb-5 col-sm pr-0">
+                                    <label class="blue-font font-weight-bold" for="visiting_city">Visiting City</label>
+                                    <select id="visiting_city" name="visiting_city" class="form-control">
+                                        <option value="">Select a city</option>
+                                        <!-- Cities will be populated dynamically here -->
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row no-gutter mb-3">
+                                <div class="form-group ml-3 mb-5 col-sm-6 pl-0">
+                                    <label class="blue-font font-weight-bold">Do you have a visa for this country?</label>
+                                    <br/>
+                                    <div class="d-flex flex-row ml-3">
+                                        <input class="mr-1" type="radio" id="visa_yes" name="visa_status" value="yes"/>
+                                        <label class="no-gutter" for="visa_yes">Yes</label>
+                                        <br/>
+                                        <input class="mr-1 ml-3" type="radio" id="visa_no" name="visa_status" value="no"/>
+                                        <label class="no-gutter" for="visa_no">No</label>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="row no-gutter mb-3">
+                                <div class="form-group ml-3 mb-5 col-sm pl-0">
+                                    <label class="blue-font font-weight-bold" for="foreign_email">Foreign Email ID</label>
+                                    <input type="email" id="foreign_email" name="foreign_email" class="form-control"/>
+                                </div>
+
+                                <div class="form-group ml-3 mb-3 col-sm pr-0">
+                                    <label class="blue-font font-weight-bold" for="foreign_contact_number">Foreign Contact Number</label>
+                                    <input type="tel" id="foreign_contact_number" name="foreign_contact_number" class="form-control"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="white-box p-5 mb-3">
+                            <h3 class="mb-5 blue-font font-weight-bold">Emergency Contact</h3>
+
+                            <div class="row no-gutter mb-3">
+                                <div class="form-group ml-3 mb-5 col-sm-6 px-0">
+                                    <label class="blue-font font-weight-bold" for="relationship">Relationship</label>
+                                    <select id="relationship" name="relationship" class="form-control">
+                                        <!-- Populate with relationships -->
+                                        <option value="friend">Friend</option>
+                                        <option value="family">Family</option>
+                                        <!-- Add more relationships as needed -->
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row no-gutter mb-3 ">
+                                <div class="form-group ml-3 mb-5 col-sm pl-0">
+                                    <label class="blue-font font-weight-bold" for="emergency_contact_name">Name</label>
+                                    <input type="text" id="emergency_contact_name" name="emergency_contact_name" class="form-control"/>
+                                </div>
+
+                                <div class="form-group ml-3 mb-5 col-sm pr-0">
+                                    <label class="blue-font font-weight-bold" for="emergency_contact_email">Email ID</label>
+                                    <input type="email" id="emergency_contact_email" name="emergency_contact_email" class="form-control"/>
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-end mb-3">
+                                <!-- Navigation Buttons -->
+                                <button type="button" id="back-button" class="btn btn-secondary text-light">Back</button>
+                                <button type="button" id="next-button-2" class="btn btn-primary blue-bg text-light ml-3">Next</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Form Section: Submitting Application (Third Breadcrumb) -->
+                    <div id="submitting-application" class="white-box p-5" style="display: none;">
+                        <h3 class="mb-5 blue-font font-weight-bold">Submitting Application</h3>
+                        <div class="ml-3">
+                            <div class="form-group mb-5">
+                                <label class="blue-font font-weight-bold">Do you need No Objection Certificate (NOC) for Immigration?</label>
+                                <br/>
+                                <div class="d-flex flex-row ml-3">
+                                    <input class="mr-1" type="radio" id="noc_yes" name="noc_needed" value="yes"/>
+                                    <label class="no-gutter" for="noc_yes">Yes</label>
+                                    <br/>
+                                    <input class="mr-1 ml-3" type="radio" id="noc_no" name="noc_needed" value="no"/>
+                                    <label class="no-gutter" for="noc_no">No</label>
+                                </div>
+
+                            </div>
+
+                            <div class="form-group mb-5">
+                                <label class="blue-font font-weight-bold">Are you availing NUST Accommodation?</label>
+                                <br/>
+                                <div class="d-flex flex-row ml-3">
+                                    <input class="mr-1" type="radio" id="accommodation_yes" name="nust_accommodation" value="yes"/>
+                                    <label class="no-gutter" for="accommodation_yes">Yes</label>
+                                    <br/>
+                                    <input class="mr-1 ml-3" type="radio" id="accommodation_no" name="nust_accommodation" value="no"/>
+                                    <label class="no-gutter" for="accommodation_no">No</label>
+                                </div>
+
+                            </div>
+
+                            <div class="form-group mb-5">
+                                <label class="blue-font font-weight-bold">Have you signed any bond with the NUST?</label>
+                                <br/>
+                                <div class="d-flex flex-row ml-3">
+                                    <input class="mr-1" type="radio" id="bond_yes" name="bond_signed" value="yes"/>
+                                    <label class="no-gutter" for="bond_yes">Yes</label>
+                                    <br/>
+                                    <input class="mr-1 ml-3" type="radio" id="bond_no" name="bond_signed" value="no"/>
+                                    <label class="no-gutter" for="bond_no">No</label>
+                                </div>
+
+                            </div>
+
+                            <h4 class="mb-3 text-danger">Affidavit</h4>
+                            <div class="form-group d-flex flex-row  align-items-start mb-2 ml-3">
+                                <input type="checkbox" id="affidavit" name="affidavit"/>
+                                <label for="affidavit" class="ml-2 no-gutter">I certify that the above information is true, correct, and complete according to my knowledge.</label>
+                            </div>
+
+                            <div class="form-group d-flex flex-row align-items-start mb-5 ml-3">
+                                <input type="checkbox" class="mt-2" id="nust_info" name="nust_info"/>
+                                <label for="nust_info" class="ml-2">I shall treat NUST as my parent University in all my Academic/Research findings and will keep NUST well informed regarding my academic pursuit on regular basis.</label>
+                            </div>
+
+                            <!-- Navigation Buttons -->
+                            <div class="d-flex justify-content-end mb-3">
+                                <button type="button" id="back-button-2" class="btn btn-secondary text-light">Back</button>
+                                <button type="submit" id="submit-button" class="btn btn-primary blue-bg text-light ml-3">Submit</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!-- Footer -->
+        <footer class="footer blue-bg py-3">
+
+            <div class="row no-gutter">
+                <div class="col-md-6 d-flex align-items-center text-light no-gutter pl-5">
+                    National University of Sciences  Technology
+                </div>
+
+                <div class="col-md-6 text-md-right no-gutter">
+                    <a href="#" class="btn btn-link text-light pr-3">Home</a>
+                    <a href="#" class="btn btn-link text-light pr-5">Contact Us</a>
+                </div>
+
+            </div>
+
+        </footer>
+    </template>
+</odoo>

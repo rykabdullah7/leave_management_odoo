@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_leave_information_user,access_leave_information_user,model_leave_information,,1,1,1,1
+access_leave_type_user,access_leave_type_user,model_leave_type,,1,1,1,1
