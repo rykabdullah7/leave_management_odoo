@@ -14,6 +14,7 @@
         'views/leave_information_template.xml',
         
     ],
+    'images': ['static/description/icon.png'],
     'assets': {
         'web.assets_frontend': [
             '/leave_management/static/src/img/logo.png',
